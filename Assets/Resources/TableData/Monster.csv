@@ -1,0 +1,11 @@
+string/Key,string/Name,int/Hp
+0,Monster_1,10
+1,Monster_2,20
+2,Monster_3,30
+3,Monster_4,40
+4,Monster_5,50
+5,Monster_6,60
+6,Monster_7,70
+7,Monster_8,80
+8,Monster_9,90
+9,Monster_10,100

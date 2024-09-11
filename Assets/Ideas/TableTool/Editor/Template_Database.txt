@@ -1,0 +1,54 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+namespace FFramework.Ideas.Tool.Database
+{
+	public class $DataClassName//表的元数据类
+	{
+		$DataAttributes
+	}
+
+	public class $DataTypeName : IDatabase
+	{
+		public const uint TYPE_ID = $DataID;
+		public const string DATA_PATH = $DtatPath;
+
+		private $DataClassName _tempData = new $DataClassName();
+		private string[][] _datas;
+
+		public uint GetTypeID()
+		{
+			return TYPE_ID;
+		}
+
+		public string GetDataPath()
+		{
+			return DATA_PATH;
+		}
+
+		public void LoadResources()
+		{
+			TextAsset textAsset = LoadResources.Load<TextAsset>(GetDataPath());
+			_datas = CSVConverter.DeserializeCSVDataString(textAsset);
+		}
+
+		public $DataClassName GetDataByKey(string key)//通过键值获取数据
+		{
+			for(int i = 0; i < _tempData.Length; i ++)
+			{
+				if(_datas[i][0] == key)
+				{
+					$CsvSerialize//反序列化数据到数据类里
+
+					return _tempData;
+				}
+			}
+			return null;
+		}
+
+		public int GetCount()
+		{
+			return _tempData.Length;
+		}
+	}
+}

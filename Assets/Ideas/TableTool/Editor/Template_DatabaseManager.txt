@@ -1,0 +1,43 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+namespace FFramework.Ideas.Tool.Database
+{
+    public class DatabaseManager
+    {
+        private Dictionary<uint,IDatabase> _tables;
+
+        public DatabaseManager()
+        {
+            _tables = new Dictionary<uint, IDatabase>();
+
+            $RegisterList
+
+            Load();
+        }
+
+        public void Load()
+        {
+            foreach(KeyValuePair<uint , IDatabase> table in _tables)
+            {
+                table.Value.LoadResources();
+            }
+        }
+
+        public T GetTable<T>() where T : IDatabase, new()
+        {
+            T result = new T();
+            if(_tables.ContainsKey(result.GetTpyeID()))
+            {
+                return _tables[result.GetTpyeID()];
+            }
+
+            return default(T);
+        }
+
+        private void RegisterDataType(IDatabase database)
+        {
+            _tables.TryAdd(database.GetTpyeID(), database);
+        }
+    }
+}
