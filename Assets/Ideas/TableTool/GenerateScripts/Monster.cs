@@ -3,17 +3,19 @@ using System.Collections.Generic;
 
 namespace FFramework.Ideas.Tool.Database
 {
-	public class $DataClassName//表的元数据类
+	public class MonsterData//表的元数据类
 	{
-		$DataAttributes
+		public  string Key;
+		public  string Name;
+		public  int Hp;
 	}
 
-	public class $DataTypeName : IDatabase
+	public class MonsterDatabase : IDatabase
 	{
-		public const uint TYPE_ID = $DataID;
-		public const string DATA_PATH = $DataPath;
+		public const uint TYPE_ID = 2;
+		public const string DATA_PATH = "CsvResources/Monster";
 
-		private $DataClassName _tempData = new $DataClassName();
+		private MonsterData _tempData = new MonsterData();
 		private string[][] _datas;
 
 		public uint GetTypeID()
@@ -32,14 +34,20 @@ namespace FFramework.Ideas.Tool.Database
 			_datas = CSVConverter.SerializeCSVDataString(textAsset);
 		}
 
-		public $DataClassName GetDataByKey(string key)//通过键值获取数据
+		public MonsterData GetDataByKey(string key)//通过键值获取数据
 		{
 			for(int i = 0; i < _datas.Length; i ++)
 			{
 				if(_datas[i][0] == key)
 				{
-					//序列化数据到数据类里
-					$CsvSerialize
+					_tempData.Key = _datas[i][0];
+		_tempData.Name = _datas[i][1];
+		
+			if(!int.TryParse(_datas[i][2], out _tempData.Hp))
+			{
+				_tempData.Hp = 0;
+			}
+//序列化数据到数据类里
 
 					return _tempData;
 				}
