@@ -14,7 +14,11 @@ namespace FFramework.Ideas.Tool.Database
         {
             _tables = new Dictionary<uint, IDatabase>();
 
-            $RegisterList
+            RegisterDataType(new CodeGenerationTestTableDatabase());
+			RegisterDataType(new MonsterDatabase());
+			RegisterDataType(new PlayerDatabase());
+			RegisterDataType(new WeaponDatabase());
+
 
             Load();
         }

@@ -1,4 +1,4 @@
-﻿string.ID,string[].Name,string.Des,int.HP,int.Exp,string.Equment,int.Num
+﻿int.ID,string[].Name,string.Des,int.HP,int.Exp,string.Equment,int.Num
 0,AAA1;BBB1;CCC1,描述1,10,100,Sword1,1
 1,AAA2;BBB2;CCC2,描述2,20,200,Sword2,2
 2,AAA3;BBB3;CCC3,描述3,30,300,Sword3,3

@@ -1,3 +1,6 @@
+// **********************************************************************
+// This file was auto generated
+// **********************************************************************
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -6,9 +9,14 @@ namespace FFramework.Ideas.Tool.Database
 	public class $DataClassName//表的元数据类
 	{
 		$DataAttributes
+
+		public override string ToString()
+		{
+			return $DataToString;
+		}		
 	}
 
-	public class $DataTypeName : IDatabase
+	public class $DataTypeName: IDatabase
 	{
 		public const uint TYPE_ID = $DataID;
 		public const string DATA_PATH = $DataPath;
@@ -32,11 +40,11 @@ namespace FFramework.Ideas.Tool.Database
 			_datas = CSVConverter.SerializeCSVDataString(textAsset);
 		}
 
-		public $DataClassName GetDataByKey(string key)//通过键值获取数据
+		public $DataClassName GetDataByKey(int key)//通过键值获取数据
 		{
-			for(int i = 0; i < _datas.Length; i ++)
+			for (int i = 0; i < _datas.Length; i++)
 			{
-				if(_datas[i][0] == key)
+				if (_datas[i][0] == key.ToString())
 				{
 					//序列化数据到数据类里
 					$CsvSerialize

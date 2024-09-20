@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,7 +22,7 @@ namespace FFramework.Ideas
 
 		private static string TEMPLATE_DATABASEMANAGER_PATH = "Assets/Ideas/TableTool/Editor/Template_DatabaseManager.txt";
 
-		private static string CSV_PATH = Application.dataPath + "/Ideas/TableTool/Resources/CsvTableData/";
+		private static string CSV_PATH = Application.dataPath + "/Ideas/TableTool/Resources/CsvResources/";
 
 		private static int DATA_ID;
 
@@ -28,12 +30,22 @@ namespace FFramework.Ideas
 
 		private static string CONVERT_LIST;//用来替换DatabaseManager里生成类的代码
 
+		private static char[] _separaters = new char[] { '.', '/' };
+
 		[MenuItem("TableTool/GenerateScript")]
 		public static void GenerateScript()
 		{
 			Initialize();
 			CreateIDatabaseScript();
 			CreateMetaScript();
+			CreateDatabaseManagerScript();
+		}
+
+		private static void CreateDatabaseManagerScript()
+		{
+			string template = GetTemplate(TEMPLATE_DATABASEMANAGER_PATH);
+			template = template.Replace("$RegisterList", REGISTER_LIST);
+			GenerateScriptFile("DatabaseManager", template);
 		}
 
 		/// <summary>
@@ -72,6 +84,7 @@ namespace FFramework.Ideas
 			string template = GetTemplate(TEMPLATE_DATABASE_PATH);//获取数据类替换模版
 			template = template.Replace("$DataClassName", textAsset.name + "Data");
 			template = template.Replace("$DataAttributes", GetClassParameters(textAsset));
+			template = template.Replace("$DataToString", GetParametersString(textAsset));
 			template = template.Replace("$CsvSerialize", GetCsvSerialize(textAsset));
 			template = template.Replace("$DataTypeName", textAsset.name + "Database");
 			template = template.Replace("$DataID", DATA_ID.ToString());
@@ -79,6 +92,39 @@ namespace FFramework.Ideas
 
 			GenerateScriptFile(textAsset.name, template);
 		}
+
+		/// <summary>
+		/// 生成ToStirng代码，方便打印数据类
+		/// 良好格式化
+		/// </summary>
+		/// <param name="textAsset"></param>
+		/// <returns></returns>
+		private static string GetParametersString(TextAsset textAsset)
+		{
+			StringBuilder result = new StringBuilder();
+
+			result.Append("$\"");
+			result.Append(textAsset.name + "\\n");
+			result.Append("{{\\n");
+
+			string[] csvParameter = CSVConverter.SerializeCSVMetaString(textAsset);
+			for (int i = 0; i < csvParameter.Length; i++)
+			{
+				string csv = csvParameter[i];
+				string[] attributes = csv.Split(_separaters, options: StringSplitOptions.RemoveEmptyEntries);
+				if (attributes[0].EndsWith("[]"))//数组
+				{
+					result.Append($"\\t{attributes[1]}: {{CSVConverter.GetArrayString({attributes[1]})}}\\n");
+				}
+				else
+					result.Append($"\\t{attributes[1]}: {{{attributes[1]}}}\\n");
+			}
+
+			result.Append("}}\"");
+			return result.ToString();
+		}
+
+
 
 		private static string GetCsvSerialize(TextAsset textAsset)
 		{

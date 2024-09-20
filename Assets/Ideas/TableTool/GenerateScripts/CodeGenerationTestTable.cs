@@ -1,3 +1,6 @@
+// **********************************************************************
+// This file was auto generated
+// **********************************************************************
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -5,16 +8,21 @@ namespace FFramework.Ideas.Tool.Database
 {
 	public class CodeGenerationTestTableData//表的元数据类
 	{
-		public  string ID;
+		public  int ID;
 		public  string[] Name;
 		public  string Des;
 		public  int HP;
 		public  int Exp;
 		public  string Equment;
 		public  int Num;
+
+		public override string ToString()
+		{
+			return $"CodeGenerationTestTable\n{{\n\tID: {ID}\n\tName: {CSVConverter.GetArrayString(Name)}\n\tDes: {Des}\n\tHP: {HP}\n\tExp: {Exp}\n\tEqument: {Equment}\n\tNum: {Num}\n}}";
+		}		
 	}
 
-	public class CodeGenerationTestTableDatabase : IDatabase
+	public class CodeGenerationTestTableDatabase: IDatabase
 	{
 		public const uint TYPE_ID = 1;
 		public const string DATA_PATH = "CsvResources/CodeGenerationTestTable";
@@ -38,13 +46,19 @@ namespace FFramework.Ideas.Tool.Database
 			_datas = CSVConverter.SerializeCSVDataString(textAsset);
 		}
 
-		public CodeGenerationTestTableData GetDataByKey(string key)//通过键值获取数据
+		public CodeGenerationTestTableData GetDataByKey(int key)//通过键值获取数据
 		{
-			for(int i = 0; i < _datas.Length; i ++)
+			for (int i = 0; i < _datas.Length; i++)
 			{
-				if(_datas[i][0] == key)
+				if (_datas[i][0] == key.ToString())
 				{
-					_tempData.ID = _datas[i][0];
+					//序列化数据到数据类里
+					
+			if(!int.TryParse(_datas[i][0], out _tempData.ID))
+			{
+				_tempData.ID = 0;
+			}
+
 		_tempData.Name = CSVConverter.ConvertToArray<string>(_datas[i][1]);
 		_tempData.Des = _datas[i][2];
 		
@@ -65,7 +79,7 @@ namespace FFramework.Ideas.Tool.Database
 			{
 				_tempData.Num = 0;
 			}
-//序列化数据到数据类里
+
 
 					return _tempData;
 				}

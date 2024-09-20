@@ -1,3 +1,6 @@
+// **********************************************************************
+// This file was auto generated
+// **********************************************************************
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -5,13 +8,18 @@ namespace FFramework.Ideas.Tool.Database
 {
 	public class PlayerData//表的元数据类
 	{
-		public  string Key;
+		public  int Key;
 		public  int Level;
 		public  int Hp;
 		public  int Exp;
+
+		public override string ToString()
+		{
+			return $"Player\n{{\n\tKey: {Key}\n\tLevel: {Level}\n\tHp: {Hp}\n\tExp: {Exp}\n}}";
+		}		
 	}
 
-	public class PlayerDatabase : IDatabase
+	public class PlayerDatabase: IDatabase
 	{
 		public const uint TYPE_ID = 3;
 		public const string DATA_PATH = "CsvResources/Player";
@@ -35,13 +43,19 @@ namespace FFramework.Ideas.Tool.Database
 			_datas = CSVConverter.SerializeCSVDataString(textAsset);
 		}
 
-		public PlayerData GetDataByKey(string key)//通过键值获取数据
+		public PlayerData GetDataByKey(int key)//通过键值获取数据
 		{
-			for(int i = 0; i < _datas.Length; i ++)
+			for (int i = 0; i < _datas.Length; i++)
 			{
-				if(_datas[i][0] == key)
+				if (_datas[i][0] == key.ToString())
 				{
-					_tempData.Key = _datas[i][0];
+					//序列化数据到数据类里
+					
+			if(!int.TryParse(_datas[i][0], out _tempData.Key))
+			{
+				_tempData.Key = 0;
+			}
+
 		
 			if(!int.TryParse(_datas[i][1], out _tempData.Level))
 			{
@@ -59,7 +73,7 @@ namespace FFramework.Ideas.Tool.Database
 			{
 				_tempData.Exp = 0;
 			}
-//序列化数据到数据类里
+
 
 					return _tempData;
 				}

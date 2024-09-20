@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace FFramework.Ideas
@@ -60,6 +61,27 @@ namespace FFramework.Ideas
 				result[i] = (T)Convert.ChangeType(strings[i], typeof(T));
 			}
 			return result;
+		}
+
+		public static string GetArrayString<T>(T[] array)
+		{
+			if (array == null)
+			{
+				return "Array is null.";
+			}
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append("[");
+			for (int i = 0; i < array.Length; i++)
+			{
+				sb.Append(array[i]);
+				if (i < array.Length - 1)
+				{
+					sb.Append(", ");
+				}
+			}
+			sb.Append("]");
+			return sb.ToString();
 		}
 	}
 }

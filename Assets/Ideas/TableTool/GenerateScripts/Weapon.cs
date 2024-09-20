@@ -1,3 +1,6 @@
+// **********************************************************************
+// This file was auto generated
+// **********************************************************************
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -5,13 +8,18 @@ namespace FFramework.Ideas.Tool.Database
 {
 	public class WeaponData//表的元数据类
 	{
-		public string Key;
-		public string Name;
-		public int[] Atk;
-		public string[] Rarity;
+		public  int Key;
+		public  string Name;
+		public  int[] Atk;
+		public  string[] Rarity;
+
+		public override string ToString()
+		{
+			return $"Weapon\n{{\n\tKey: {Key}\n\tName: {Name}\n\tAtk: {CSVConverter.GetArrayString(Atk)}\n\tRarity: {CSVConverter.GetArrayString(Rarity)}\n}}";
+		}		
 	}
 
-	public class WeaponDatabase : IDatabase
+	public class WeaponDatabase: IDatabase
 	{
 		public const uint TYPE_ID = 4;
 		public const string DATA_PATH = "CsvResources/Weapon";
@@ -35,16 +43,22 @@ namespace FFramework.Ideas.Tool.Database
 			_datas = CSVConverter.SerializeCSVDataString(textAsset);
 		}
 
-		public WeaponData GetDataByKey(string key)//通过键值获取数据
+		public WeaponData GetDataByKey(int key)//通过键值获取数据
 		{
 			for (int i = 0; i < _datas.Length; i++)
 			{
-				if (_datas[i][0] == key)
+				if (_datas[i][0] == key.ToString())
 				{
-					_tempData.Key = _datas[i][0];
-					_tempData.Name = _datas[i][1];
-					_tempData.Atk = CSVConverter.ConvertToArray<int>(_datas[i][2]);
-					_tempData.Rarity = CSVConverter.ConvertToArray<string>(_datas[i][3]);//序列化数据到数据类里
+					//序列化数据到数据类里
+					
+			if(!int.TryParse(_datas[i][0], out _tempData.Key))
+			{
+				_tempData.Key = 0;
+			}
+
+		_tempData.Name = _datas[i][1];
+		_tempData.Atk = CSVConverter.ConvertToArray<int>(_datas[i][2]);
+		_tempData.Rarity = CSVConverter.ConvertToArray<string>(_datas[i][3]);
 
 					return _tempData;
 				}

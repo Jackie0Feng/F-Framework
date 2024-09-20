@@ -1,4 +1,4 @@
-string/Key,string/Name,int/Hp
+int/Key,string/Name,int/Hp
 0,Monster_1,10
 1,Monster_2,20
 2,Monster_3,30
